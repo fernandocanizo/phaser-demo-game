@@ -24,6 +24,8 @@ let score = 0
 let lives = 3
 let scoreText, livesText, cheeseGroup, catGroup, road
 let wasCatSpawnedLastTick = false
+let pauseButton
+let isPaused = false
 
 const laneX = [100, 300]
 
@@ -60,9 +62,27 @@ function create() {
     callback: spawnItem,
     callbackScope: this
   })
+
+  pauseButton = this.add.text(360, 10, "⏸", {
+    fontSize: "24px",
+    fill: "#fff",
+    backgroundColor: "#333",
+    padding: { x: 6, y: 4 }
+  })
+    .setOrigin(1, 0)
+    .setInteractive()
+
+  pauseButton.on("pointerdown", () => togglePause.call(this))
+
+  // Also pause via pressing "P" key
+  this.input.keyboard.on("keydown-P", () => togglePause.call(this))
 }
 
 function update() {
+  if (isPaused) {
+    return
+  }
+
   road.tilePositionY -= level
   if (Phaser.Input.Keyboard.JustDown(cursors.left)) {
     player.x = laneX[0]
@@ -137,5 +157,19 @@ function showEffect(scene, x, y, key) {
     duration: 400,
     onComplete: () => fx.destroy()
   })
+}
+
+function togglePause() {
+  isPaused = !isPaused
+
+  if (isPaused) {
+    this.physics.world.pause()
+    this.time.paused = true
+    pauseButton.setText("▶")
+  } else {
+    this.physics.world.resume()
+    this.time.paused = false
+    pauseButton.setText("⏸")
+  }
 }
 
