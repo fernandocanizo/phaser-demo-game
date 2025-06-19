@@ -19,6 +19,7 @@ const config = {
 
 let player
 let cursors
+let level = 1 // Also defines the background scrolling speed
 
 const game = new Phaser.Game(config)
 
@@ -37,7 +38,7 @@ function create() {
 }
 
 function update() {
-  road.tilePositionY -= 2
+  road.tilePositionY -= level
   if (Phaser.Input.Keyboard.JustDown(cursors.left)) {
     player.x = 100
   } else if (Phaser.Input.Keyboard.JustDown(cursors.right)) {
