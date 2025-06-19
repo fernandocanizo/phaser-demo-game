@@ -23,9 +23,11 @@ let cursors
 const game = new Phaser.Game(config)
 
 function preload() {
-  this.load.image("mouse", "") // Placeholder
-  this.load.image("cheese", "https://examples.phaser.io/assets/sprites/block.png") // Placeholder
-  this.load.image("cat", "https://examples.phaser.io/assets/sprites/baddie.png") // Placeholder
+  this.load.image("road", "img/road-scaled.down.600x600.png")
+  this.load.image("mouse", "img/top.down.mouse.03.png")
+  this.load.image("cheese", "img/cheese.piece.01-scaled.down.100x100.png")
+  this.load.image("cat1", "img/cat.01-scaled.down.100x100.png")
+  this.load.image("cat2", "img/cat.02-scaled.down.100x100.png")
 }
 
 function create() {
