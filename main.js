@@ -53,8 +53,10 @@ function create() {
   this.physics.add.overlap(player, cheeseGroup, collectCheese, null, this)
   this.physics.add.overlap(player, catGroup, hitCat, null, this)
 
-  scoreText = this.add.text(10, 10, "Score: 0", { fontSize: "18px", fill: "#fff" })
-  livesText = this.add.text(10, 30, "Lives: 3", { fontSize: "18px", fill: "#fff" })
+  scoreText = this.add.text(10, 10, "Score: 0", { fontSize: "18px", fill: "#00ff00" })
+    .setDepth(1)
+  livesText = this.add.text(10, 30, "Lives: 3", { fontSize: "18px", fill: "#00ff00" })
+    .setDepth(1)
 
   this.time.addEvent({
     delay: 800,
