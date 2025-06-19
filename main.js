@@ -26,6 +26,7 @@ let scoreText, livesText, cheeseGroup, catGroup, road
 let wasCatSpawnedLastTick = false
 let pauseButton
 let isPaused = false
+let isGameOver = false
 
 const laneX = [100, 300]
 
@@ -68,11 +69,11 @@ function create() {
   })
     .setDepth(1)
 
-  this.time.addEvent({
+  this.spawnEvent = this.time.addEvent({
     delay: 800,
     loop: true,
     callback: spawnItem,
-    callbackScope: this
+    callbackScope: this,
   })
 
   pauseButton = this.add.text(360, 10, "⏸", {
@@ -91,7 +92,7 @@ function create() {
 }
 
 function update() {
-  if (isPaused) {
+  if (isPaused || isGameOver) {
     return
   }
 
@@ -114,6 +115,31 @@ function update() {
     if (obj.y > 650) {
       obj.destroy()
     }
+  })
+}
+
+function triggerGameOver() {
+  isGameOver = true
+  this.physics.pause()
+  this.time.paused = true
+  this.spawnEvent.remove()
+
+  const gameOverText = this.add.text(200, 300, "Game Over", {
+    fontSize: "16px",
+    fill: "#ff0000",
+    fontStyle: "bold",
+    stroke: "#000000",
+    strokeThickness: 3,
+  })
+  .setOrigin(0.5)
+  .setDepth(10)
+  .setScale(0)
+
+  this.tweens.add({
+    targets: gameOverText,
+    scale: 3,
+    duration: 1000,
+    ease: "Bounce.easeOut"
   })
 }
 
@@ -153,9 +179,9 @@ function hitCat(player, cat) {
   cat.destroy()
   lives -= 1
   livesText.setText("Lives: " + lives)
-  if (lives <= 0) {
-    this.physics.pause()
-    livesText.setText("Game Over")
+
+  if (lives <= 0 && !isGameOver) {
+    triggerGameOver.call(this)
   }
 }
 
