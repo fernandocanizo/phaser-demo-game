@@ -89,7 +89,6 @@ function spawnItem() {
   const spawnCatChance = 0.4
   const gotCat = Math.random() < spawnCatChance
 
-  console.debug("cat", gotCat, "wasCat", wasCatSpawnedLastTick)
   if (!wasCatSpawnedLastTick && gotCat) {
     wasCatSpawnedLastTick = !wasCatSpawnedLastTick
     const cat = Math.random() > 0.5 ? "cat1" : "cat2"
