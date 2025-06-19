@@ -31,11 +31,13 @@ function preload() {
 }
 
 function create() {
+  road = this.add.tileSprite(200, 300, 400, 600, "road")
   player = this.physics.add.sprite(200, 500, "mouse")
   cursors = this.input.keyboard.createCursorKeys()
 }
 
 function update() {
+  road.tilePositionY -= 2
   if (Phaser.Input.Keyboard.JustDown(cursors.left)) {
     player.x = 100
   } else if (Phaser.Input.Keyboard.JustDown(cursors.right)) {
