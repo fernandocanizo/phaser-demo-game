@@ -35,6 +35,8 @@ function preload() {
   this.load.image("cheese", "img/cheese.piece.01-scaled.down.100x100.png")
   this.load.image("cat1", "img/cat.01-scaled.down.100x100.png")
   this.load.image("cat2", "img/cat.02-scaled.down.100x100.png")
+  this.load.image("party-popper", "img/party.popper.png")
+  this.load.image("starburst", "img/starburst.png")
 }
 
 function create() {
@@ -108,12 +110,14 @@ function spawnItem() {
 }
 
 function collectCheese(player, cheese) {
+  showEffect(this, cheese.x, cheese.y, "party-popper")
   cheese.destroy()
   score += 1
   scoreText.setText("Score: " + score)
 }
 
 function hitCat(player, cat) {
+  showEffect(this, cat.x, cat.y, "starburst")
   cat.destroy()
   lives -= 1
   livesText.setText("Lives: " + lives)
@@ -122,3 +126,16 @@ function hitCat(player, cat) {
     livesText.setText("Game Over")
   }
 }
+
+function showEffect(scene, x, y, key) {
+  const fx = scene.add.sprite(x, y, key)
+  fx.setScale(0.5)
+  scene.tweens.add({
+    targets: fx,
+    alpha: 0,
+    scale: 1,
+    duration: 400,
+    onComplete: () => fx.destroy()
+  })
+}
+
