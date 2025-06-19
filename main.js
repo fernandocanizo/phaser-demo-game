@@ -27,6 +27,7 @@ let wasCatSpawnedLastTick = false
 let pauseButton
 let isPaused = false
 let isGameOver = false
+let restartButton
 
 const laneX = [100, 300]
 
@@ -131,9 +132,9 @@ function triggerGameOver() {
     stroke: "#000000",
     strokeThickness: 3,
   })
-  .setOrigin(0.5)
-  .setDepth(10)
-  .setScale(0)
+    .setOrigin(0.5)
+    .setDepth(10)
+    .setScale(0)
 
   this.tweens.add({
     targets: gameOverText,
@@ -141,6 +142,19 @@ function triggerGameOver() {
     duration: 1000,
     ease: "Bounce.easeOut"
   })
+
+  restartButton = this.add.text(200, 400, "Restart", {
+    fontSize: "24px",
+    fill: "#ffffff",
+    backgroundColor: "#000000",
+    padding: { x: 10, y: 5 },
+  })
+    .setOrigin(0.5)
+    .setInteractive()
+    .setDepth(10)
+
+  restartButton.on("pointerdown", () => restartGame.call(this))
+  this.input.keyboard.once("keydown-ENTER", () => restartGame.call(this))
 }
 
 function spawnItem() {
@@ -208,6 +222,52 @@ function togglePause() {
     this.physics.world.resume()
     this.time.paused = false
     pauseButton.setText("⏸")
+  }
+}
+
+function restartGame() {
+  // Reset state flags
+  isGameOver = false
+  isPaused = false
+
+  // Clear all existing objects
+  cheeseGroup.clear(true, true)
+  catGroup.clear(true, true)
+
+  // Reset player position
+  player.setPosition(laneX[Math.random() > 0.5 ? 0 : 1], 500)
+
+  // Reset score and lives
+  score = 0
+  lives = 3
+  scoreText.setText("Score: 0")
+  livesText.setText("Lives: 3")
+
+  // Resume game logic
+  this.physics.resume()
+  this.time.paused = false
+
+  // Restart spawn timer
+  this.spawnEvent = this.time.addEvent({
+    delay: 800,
+    loop: true,
+    callback: spawnItem,
+    callbackScope: this
+  })
+
+  // Remove all UI elements from game over screen
+  this.children.list.forEach(child => {
+    if (child.text === "Game Over") {
+      child.destroy()
+    }
+    if (child.text === "Restart") {
+      child.destroy()
+    }
+  })
+
+  if (restartButton) {
+    restartButton.destroy()
+    restartButton = null
   }
 }
 
