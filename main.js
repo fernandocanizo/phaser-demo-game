@@ -23,6 +23,7 @@ let level = 1 // Also defines the background scrolling speed
 let score = 0
 let lives = 3
 let scoreText, livesText, cheeseGroup, catGroup, road
+let wasCatSpawnedLastTick = false
 
 const laneX = [100, 300]
 
@@ -83,17 +84,27 @@ function update() {
 }
 
 function spawnItem() {
-  const lane = Phaser.Math.Between(0, 1)
-  const otherLane = lane === 0 ? 1 : 0
-  const spawnCat = Phaser.Math.Between(0, 1)
+  const mainLane = Phaser.Math.Between(0, 1)
+  const otherLane = mainLane === 0 ? 1 : 0
+  const spawnCatChance = 0.4
+  const gotCat = Math.random() < spawnCatChance
 
-  if (spawnCat) {
-    catGroup.create(laneX[lane], -50, "cat")
-    if (Phaser.Math.Between(0, 1)) {
+  console.debug("cat", gotCat, "wasCat", wasCatSpawnedLastTick)
+  if (!wasCatSpawnedLastTick && gotCat) {
+    wasCatSpawnedLastTick = !wasCatSpawnedLastTick
+    const cat = Math.random() > 0.5 ? "cat1" : "cat2"
+    catGroup.create(laneX[mainLane], -50, cat)
+
+    const gotCheese = Math.random() < 0.5
+    if (gotCheese) {
       cheeseGroup.create(laneX[otherLane], -50, "cheese")
     }
   } else {
-    cheeseGroup.create(laneX[lane], -50, "cheese")
+    wasCatSpawnedLastTick = !wasCatSpawnedLastTick
+    const gotCheese = Math.random() < 0.5
+    if (gotCheese) {
+      cheeseGroup.create(laneX[mainLane], -50, "cheese")
+    }
   }
 }
 
