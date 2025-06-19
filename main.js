@@ -39,7 +39,7 @@ function preload() {
 
 function create() {
   road = this.add.tileSprite(200, 300, 400, 600, "road")
-  player = this.physics.add.sprite(200, 500, "mouse")
+  player = this.physics.add.sprite(300, 500, "mouse")
   player.setCollideWorldBounds(true)
 
   cursors = this.input.keyboard.createCursorKeys()
